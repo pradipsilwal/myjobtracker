@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Add Jobs</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <form action="/addAppliedJobs" method="POST">
+        <label for="jtitle">Job Title</label>
+        <input type="text" id="jtitle" name="jtitle"><br><br>
+        <label for="adate">Applied Date:</label>
+        <input type="text" id="adate" name="adate"><br><br>
+        <label for="status">Job Status</label>
+        <input type="text" id="status" name="status"><br><br>
+        <label for="jurl">Job URL</label>
+        <input type="text" id="jurl" name="jurl"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
