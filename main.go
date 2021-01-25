@@ -41,10 +41,27 @@ func addProfileContentHandler(writer http.ResponseWriter, request *http.Request)
 	http.Redirect(writer, request, "/", http.StatusFound)
 }
 
+func makeConnectionHandler(writer http.ResponseWriter, request *http.Request) {
+	html, err := template.ParseFiles("www/connectionsPage.html")
+	check(err)
+	err = html.Execute(writer, nil)
+	check(err)
+
+}
+
+func applyJobsHandler(writer http.ResponseWriter, request *http.Request) {
+	html, err := template.ParseFiles("www/applyJobs.html")
+	check(err)
+	err = html.Execute(writer, nil)
+	check(err)
+}
+
 func main() {
 	http.HandleFunc("/", myHandler)
 	http.HandleFunc("/createProfile", createProfileHandler)
 	http.HandleFunc("/addProfileContent", addProfileContentHandler)
+	http.HandleFunc("/makeConnection", makeConnectionHandler)
+	http.HandleFunc("/applyJobs", applyJobsHandler)
 	err := http.ListenAndServe("localhost:8080", nil)
 	log.Fatal(err)
 }
