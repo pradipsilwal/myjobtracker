@@ -7,13 +7,18 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
-type JobsApplied struct {
-	Title          string
-	Date           string
-	ResponseStatus string
-	JobURL         string
+// type JobsApplied struct {
+// 	Title          string
+// 	ADate          string
+// 	ResponseStatus string
+// 	JobURL         string
+// }
+
+type JobAppliedDetails struct {
+	AppliedDetails []string
 }
 
 func check(err error) {
@@ -36,6 +41,15 @@ func getStrings(filename string) []string {
 	}
 	check(scanner.Err())
 	return lines
+}
+
+func splitJobFields(appliedJobs []string) [][]string {
+	var splittedJobs [][]string
+	for _, jobs := range appliedJobs {
+		tempSplit := strings.Split(jobs, " ")
+		splittedJobs = append(splittedJobs, tempSplit)
+	}
+	return splittedJobs
 }
 
 func myHandler(writer http.ResponseWriter, request *http.Request) {
@@ -82,17 +96,39 @@ func applyJobsHandler(writer http.ResponseWriter, request *http.Request) {
 
 func viewAppliedJobsHandler(writer http.ResponseWriter, request *http.Request) {
 	appliedJobs := getStrings("files/appliedJobs.txt")
-	fmt.Printf("%#v\n", appliedJobs)
 	html, err := template.ParseFiles("www/viewJobs.html")
 	check(err)
-	// varJobsApplied := JobsApplied{
-	// 	Title:          appliedJobs[0],
-	// 	Date:           appliedJobs[1],
-	// 	ResponseStatus: appliedJobs[2],
-	// 	JobURL:         appliedJobs[3],
+
+	jobDetails := JobAppliedDetails{
+		AppliedDetails: appliedJobs,
+	}
+	if len(appliedJobs) != 0 {
+		err = html.Execute(writer, jobDetails)
+	} else {
+		err = html.Execute(writer, nil)
+		check(err)
+	}
+
+	// splittedJobs := splitJobFields(appliedJobs)
+
+	// if len(splittedJobs) != 0 {
+	// 	var jobsAppliedArray []JobsApplied
+	// 	for _, jobs := range splittedJobs {
+	// 		tempValue := JobsApplied{
+	// 			Title:          jobs[0],
+	// 			ADate:          jobs[1],
+	// 			ResponseStatus: jobs[2],
+	// 			JobURL:         jobs[3],
+	// 		}
+	// 		jobsAppliedArray = append(jobsAppliedArray, tempValue)
+	// 	}
+	// 	err = html.Execute(writer, jobsAppliedArray)
+	// 	check(err)
+	// } else {
+	// 	err = html.Execute(writer, nil)
+	// 	check(err)
 	// }
-	err = html.Execute(writer, nil)
-	check(err)
+
 }
 
 func addAppliedJobsFormHandler(writer http.ResponseWriter, request *http.Request) {

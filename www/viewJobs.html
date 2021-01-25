@@ -10,7 +10,11 @@
 </head>
 <body>
 
-    <!-- {{.Title}}    {{.Date}}    {{.ResponseStatus}}    {{.JobURL}} -->
+    <div>
+        {{range .AppliedDetails}}
+            <p>{{.}}</p>
+        {{end}}
+    </div>
 
 </body>
 </html>
